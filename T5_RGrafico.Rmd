@@ -1,0 +1,51 @@
+---
+title: "T5_RGrafico"
+author: "Betzabeth Mishel Imaicela Valero"
+date: "2023-02-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+```{r cars}
+
+## Librerias usadas
+library(ggplot2)
+library(tidyverse)
+library(ggpubr)
+library(ggpmisc)
+
+## Base de datos de who 
+data("who")
+
+
+## Se obtienen unicamente los datos de niñas y niños del rango de edad pedido (0 y 14 años) 
+rango_de_edad <- who %>% select(country, year, new_sp_m014, new_sp_f014) 
+print("Datos de niñas y niños entre 0 y 14 años.")
+print(rango_de_edad)
+
+
+## Se extraen los datos del año 1996 en adelante (1996 - 2012).
+subset_96_12 <- who %>% filter (year >= 1996 & year <= 2012)
+
+
+## Datos de niños y niñas desde el año 1996 y se eliminan los valores NA 
+ninos_ninas_purgado <- who %>% 
+  select(country, year, new_sp_m014, new_sp_f014) %>% 
+  filter (year >= 1996 & year <= 2012) %>% subset(!is.na(new_sp_m014)) %>%
+  subset(!is.na(new_sp_f014)) 
+print("Datos del año 1996 en adelante (1996 - 2012).")
+print(ninos_ninas_purgado)
+
+
+## Nube de puntos.
+print("Geometría de nube de puntos.")
+ggplot(ninos_ninas_purgado, aes(x=new_sp_f014, y=new_sp_m014, color = year)) + geom_point() +
+  theme_classic()
+
+```
